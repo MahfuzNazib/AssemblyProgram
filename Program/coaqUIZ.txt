@@ -1,0 +1,143 @@
+
+
+;;**Question : Input A to F and save BX Register This way A0B0.But if Input F then BX=A010 
+
+;
+XOR BH,BH
+XOR BL,BL
+mov ah,1
+int 21h 
+
+mov bh,al
+sub bh,37h
+shl bh,4
+cmp al,46h
+je exp
+inc al
+mov bl,al
+sub bl,37h
+shl bl,4
+jmp exit
+exp:
+mov al,'1'
+mov bl,al
+shl bl,4
+exit:
+mov ah,4
+int 21h
+;
+
+----------------------------------------------------------
+
+
+;**Input A and It will save AB in BL Register
+
+xor bl,bl
+mov ah,1
+int 21h
+
+mov bl,al
+sub bl,37h
+shl bl,4
+inc al
+sub al,37h
+or bl,al 
+;
+----------------------------------------------
+;**Input A and save BA in BL Register
+;
+xor bl,bl
+mov ah,1
+int 21h
+
+mov bl,al
+sub bl,37h
+inc al
+sub al,37h
+shl al,4
+or bl,al 
+
+--------------------------------------
+;**Input A and It will Save B0A0 in BX Register
+
+xor bh,bh
+xor bl,bl
+
+mov ah,1
+int 21h
+
+mov bl,al
+sub bl,37h
+shl bl,4
+
+inc al
+sub al,37h
+mov bh,al
+shl bh,4
+
+--------------------------------------------------------------
+
+;**Reverse Output Print
+
+.MODEL SMALL
+.STACK 100H
+.DATA
+    MSG1 DB 'ENTER TOTAL NUMBER OF INPUT: $'
+    LB DB 0DH,0AH,'$'
+    MSG2 DB 0DH,0AH,'REVERSED RESULT IS : $'
+.CODE
+MAIN PROC
+    MOV AX,@DATA
+    MOV DS,AX
+    
+    XOR CH,CH
+    XOR CL,CL
+    XOR BX,BX
+    XOR DH,DH
+    
+    MOV AH,9
+    LEA DX,MSG1
+    INT 21H
+    
+    MOV AH,1
+    INT 21H
+    
+    MOV CL,AL
+    SUB CL,30H
+    
+    MOV AH,9
+    LEA DX,LB
+    INT 21H
+    
+    INPUT:
+        MOV AH,1
+        INT 21H
+        MOV BL,AL
+        PUSH BX
+        INC DH
+        LOOP INPUT
+    
+    MOV CL,DH
+    MOV AH,9
+    LEA DX,LB
+    INT 21H
+    
+    OUTPUT:
+        POP BX
+        MOV AH,2
+        MOV DL,BL
+        INT 21H
+        LOOP OUTPUT
+        
+        MAIN ENDP
+END MAIN
+        
+    
+    
+    
+    
+    
+
+           
+
+
